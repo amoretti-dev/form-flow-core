@@ -266,9 +266,9 @@ MIT © [Andrea Moretti]
 
 ## ☕ Support
 
-If this library saves you time, consider supporting its development:
+If this library saves you time, or you just like my work you can just
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/andrea.moretti)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-blue?logo=buy-me-a-coffee)](https://buymeacoffee.com/andrea.moretti)
 
 ---
 
