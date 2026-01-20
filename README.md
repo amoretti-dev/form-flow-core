@@ -1,8 +1,5 @@
 # @form-flow/core
 
-![npm](https://img.shields.io/npm/v/@form-flow/core) ![NPM License](https://img.shields.io/npm/l/%40form-flow%2Fcore)
- ![build](https://img.shields.io/github/actions/workflow/status/amoretti-dev/form-flow-core/ci.yml)
-
 > **Framework-agnostic TypeScript engine for conditional form field behavior**  
 > Define when fields should be visible, required, disabled, or readonly based on other field values—no framework lock-in.
 
