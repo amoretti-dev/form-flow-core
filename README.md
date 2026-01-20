@@ -245,7 +245,7 @@ Tests are written with **Jest** and cover both `RuleEvaluator` and `FieldHelper`
 
 ---
 
-## 🤝 Contributing
+<!--## 🤝 Contributing
 
 Contributions are welcome! Please check out the [Contributing Guide](CONTRIBUTING.md).
 
@@ -256,6 +256,7 @@ Contributions are welcome! Please check out the [Contributing Guide](CONTRIBUTIN
 5. Open a Pull Request
 
 ---
+-->
 
 ## 📄 License
 
@@ -274,8 +275,8 @@ If this library saves you time, consider supporting its development:
 ## 🔗 Links
 
 - [📦 npm Package](https://www.npmjs.com/package/@form-flow/core)
-- [🐛 Report Issues](https://github.com/YOUR_USERNAME/form-flow-core/issues)
-- [💬 Discussions](https://github.com/YOUR_USERNAME/form-flow-core/discussions)
+- [🐛 Report Issues](https://github.com/amoretti-dev/form-flow-core/issues)
+- [💬 Discussions](https://github.com/amoretti-dev/form-flow-core/discussions)
 
 ---
 
