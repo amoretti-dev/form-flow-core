@@ -1,6 +1,7 @@
 # @form-flow/core
 
-![npm](https://img.shields.io/npm/v/@form-flow/core) ![license](https://img.shields.io/npm/l/@form-flow/core) ![build](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/form-flow-core/ci.yml)
+![npm](https://img.shields.io/npm/v/@form-flow/core) ![NPM License](https://img.shields.io/npm/l/%40form-flow%2Fcore)
+ ![build](https://img.shields.io/github/actions/workflow/status/amoretti-dev/form-flow-core/ci.yml)
 
 > **Framework-agnostic TypeScript engine for conditional form field behavior**  
 > Define when fields should be visible, required, disabled, or readonly based on other field values—no framework lock-in.
@@ -266,7 +267,7 @@ MIT © [Andrea Moretti]
 
 If this library saves you time, consider supporting its development:
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/YOUR_USERNAME)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/andrea.moretti)
 
 ---
 
