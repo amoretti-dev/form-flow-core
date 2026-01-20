@@ -1,7 +1,7 @@
 {
   "name": "@form-flow/core",
   "version": "1.0.0",
-  "description": "",
+  "description": "TypeScript engine for conditional UI states (visible, required, disabled, readonly) on form fields",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "directories": {
@@ -13,9 +13,19 @@
   "scripts": {
     "dev": "ts-node src/index.ts",
     "build": "tsc --build",
-    "test": "./node_modules/.bin/jest"
+    "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "typescript",
+    "form",
+    "validation",
+    "rules",
+    "ui-states"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amoretti-dev/form-flow-core.git"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
