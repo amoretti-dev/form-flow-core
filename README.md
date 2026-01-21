@@ -1,6 +1,6 @@
 # @form-flow/core
 ![GitHub repo size](https://img.shields.io/github/repo-size/amoretti-dev/form-flow-core)
-![NPM Downloads](https://img.shields.io/npm/dy/%40form-flow%2Fcore)
+![NPM Downloads](https://img.shields.io/npm/dw/%40form-flow%2Fcore)
 
 
 > **Framework-agnostic TypeScript engine for conditional form field behavior**  
