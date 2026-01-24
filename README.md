@@ -5,6 +5,7 @@
 
 > **Framework-agnostic TypeScript engine for conditional form field behavior**  
 > Define when fields should be visible, required, disabled, or readonly based on other field values—no framework lock-in.
+> Form-flow rules are based on [json-logic-js](https://github.com/jwadhams/json-logic-js)
 
 ---
 
