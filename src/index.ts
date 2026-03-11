@@ -2,6 +2,7 @@
 
 // 1. Tipi di campo e strutture
 export {
+    type BaseFieldDefinition,
     type FieldControlType,
     type FieldDefinition,
     type ConditionalFieldProperty,
@@ -9,6 +10,7 @@ export {
     type FieldControlState,
     type CustomFieldControlType,
     type FormControlState,
+    type RuleContextFieldDefinition,
 } from './models/field-definition';
 export {
     type FormFlowDefinition,

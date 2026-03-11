@@ -95,4 +95,38 @@ describe("FormFlowRuleEvaluator", () => {
     expect(evaluated.consent.visible).toBe(true);
     expect(evaluated.consent.required).toBe(true);
   });
+
+  it("evaluates target fields against nested rule context paths from form data", () => {
+    const fields: FieldDefinition[] = [
+      {
+        id: "deal.goal",
+        label: "Deal Goal",
+        type: "number",
+        visibleIf: {
+          groupId: "1",
+          operator: "and",
+          ruleType: 'visibleIf',
+          rules: [
+            { ruleId: "1", conditionFieldId: "customer.yearlyEarnings", operator: "gte", value: 1000 }
+          ]
+        },
+      }
+    ];
+
+    const evaluated = FormFlowRuleEvaluator.evaluateFields(fields, {
+      customer: {
+        yearlyEarnings: 1500
+      }
+    });
+
+    expect(evaluated).toEqual<FormControlState>({
+      "deal.goal": {
+        visible: true,
+        required: false,
+        disabled: false,
+        readonly: false
+      }
+    });
+    expect(evaluated.customer).toBeUndefined();
+  });
 });

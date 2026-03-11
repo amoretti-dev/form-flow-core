@@ -1,4 +1,4 @@
-import { CustomFieldControlType, FieldDefinition } from "./field-definition";
+import { CustomFieldControlType, FieldDefinition, RuleContextFieldDefinition } from "./field-definition";
 
 export type FormFlowValues = Record<string, any>;
 
@@ -6,6 +6,7 @@ export interface FormFlowDefinition
     <TControl extends CustomFieldControlType = CustomFieldControlType> {
     formId: string;
     fields: FieldDefinition<TControl>[];
+    ruleContextFields?: RuleContextFieldDefinition<TControl>[];
     metadata?: Record<string, any>;
 }
 
@@ -17,4 +18,3 @@ export interface FormFlowSchema<TControl extends CustomFieldControlType = Custom
     setFieldValue: (fieldId: keyof FormFlowValues, value: any, emit?: boolean) => void;
     readonly values: FormFlowValues;
 }
-

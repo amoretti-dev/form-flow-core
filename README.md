@@ -161,6 +161,43 @@ const state: FormControlState = RuleEvaluator.evaluateFields(
 }
 ```
 
+### Rule context fields
+
+Use `definition.ruleContextFields` to expose source-only paths that can be referenced in rules without promoting them to target form fields.
+
+```ts
+const definition = {
+  formId: "deal-form",
+  fields: [
+    {
+      id: "deal.goal",
+      type: "number",
+      label: "Deal Goal",
+      visibleIf: {
+        groupId: "goal-visible",
+        operator: "and",
+        ruleType: "visibleIf",
+        rules: [
+          {
+            ruleId: "1",
+            conditionFieldId: "customer.yearlyEarnings",
+            operator: "gte",
+            value: 1000
+          }
+        ]
+      }
+    }
+  ],
+  ruleContextFields: [
+    {
+      id: "customer.yearlyEarnings",
+      type: "number",
+      label: "Customer Yearly Earnings"
+    }
+  ]
+};
+```
+
 ### `FieldHelper.getAvailableRuleTypes()`
 
 Get which rule types can still be added to a field.
@@ -194,15 +231,26 @@ console.log(availableRules); // ["disabledIf", "readonlyIf"]
 ### Type Definitions
 
 ```ts
-// Field with conditional rules
-type FieldDefinition<T = any> = {
+type BaseFieldDefinition<T = any> = {
   id: string;
   type: string;
   label: string;
+};
+
+// Field with conditional rules
+type FieldDefinition<T = any> = BaseFieldDefinition<T> & {
   visibleIf?: FieldRuleGroupDefinition;
   requiredIf?: FieldRuleGroupDefinition;
   disabledIf?: FieldRuleGroupDefinition;
   readonlyIf?: FieldRuleGroupDefinition;
+};
+
+type RuleContextFieldDefinition<T = any> = BaseFieldDefinition<T>;
+
+type FormFlowDefinition<T = any> = {
+  formId: string;
+  fields: FieldDefinition<T>[];
+  ruleContextFields?: RuleContextFieldDefinition<T>[];
 };
 
 // Atomic rule

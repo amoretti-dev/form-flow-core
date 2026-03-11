@@ -1,11 +1,30 @@
-import { FieldDefinition } from './models/field-definition';
+import { FieldDefinition, RuleContextFieldDefinition } from './models/field-definition';
+import { FormFlowDefinition } from './models/form-definition';
 import { FieldRuleNode } from './models/group';
 import { RuleHelper } from './utility/rule-helper';
 
 export class DependencyGraph {
     private dependentsMap: Map<string, Set<string>> = new Map();
 
-    constructor(fields: FieldDefinition[]) {
+    constructor(definition: FormFlowDefinition);
+    constructor(fields: FieldDefinition[], ruleContextFields?: RuleContextFieldDefinition[]);
+    constructor(
+        definitionOrFields: FormFlowDefinition | FieldDefinition[],
+        ruleContextFields: RuleContextFieldDefinition[] = []
+    ) {
+        const fields = Array.isArray(definitionOrFields)
+            ? definitionOrFields
+            : definitionOrFields.fields;
+        const contextFields = Array.isArray(definitionOrFields)
+            ? ruleContextFields
+            : definitionOrFields.ruleContextFields ?? [];
+
+        contextFields.forEach((field) => {
+            if (!this.dependentsMap.has(field.id)) {
+                this.dependentsMap.set(field.id, new Set());
+            }
+        });
+
         fields.forEach(field => {
             const dependencies = new Set<string>();
 

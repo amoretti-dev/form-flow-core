@@ -16,17 +16,11 @@ export type FieldListOption = {
   value: any;
 } & Record<string, any>;
 
-export interface FieldDefinition<TControl extends FieldControlType = FieldControlType> {
+export interface BaseFieldDefinition<TControl extends FieldControlType = FieldControlType> {
   id: string;
   label: string;
   type: TControl;
-  defaultValue?: any;
-
-  // Optional logic-based rules
-  visibleIf?: FieldRuleGroupDefinition;
-  requiredIf?: FieldRuleGroupDefinition;
-  disabledIf?: FieldRuleGroupDefinition;
-  readonlyIf?: FieldRuleGroupDefinition;
+  metadata?: Record<string, any>;
 
   /**
  * List of available options for fields like select, checkbox, or radio buttons.
@@ -39,20 +33,41 @@ export interface FieldDefinition<TControl extends FieldControlType = FieldContro
  * to its shape using `satisfies` to ensure compatibility while extending it
  * with additional UI-related metadata (e.g. icons, images, tooltips).
  *
- * Example:
+ * @example
  *
+ * ```tsx
  * const options = [
  *   { label: "Startup", value: "startup", icon: "🚀" },
  *   { label: "Agency", value: "agency", icon: "🏢" },
  *   { label: "Freelancer", value: "freelancer", icon: "🧑‍💻" }
  * ] satisfies FieldOption[];
+ * ```
  */
   options?: FieldListOption[];
 }
 
+export interface FieldDefinition<TControl extends FieldControlType = FieldControlType>
+  extends BaseFieldDefinition<TControl> {
+  defaultValue?: any;
+
+  // Optional logic-based rules
+  visibleIf?: FieldRuleGroupDefinition;
+  requiredIf?: FieldRuleGroupDefinition;
+  disabledIf?: FieldRuleGroupDefinition;
+  readonlyIf?: FieldRuleGroupDefinition;
+}
 
 /**
- * Rappresenta il campo target dopo la valutazione delle regole condizionali
+ * Source-only field made available to rule builders and dependency tracking.
+ * It can be referenced inside conditions, but it is never evaluated as a target
+ * control state by the core runtime.
+ */
+export interface RuleContextFieldDefinition<TControl extends FieldControlType = FieldControlType>
+  extends BaseFieldDefinition<TControl> {}
+
+
+/**
+ * Represent target field after conditional rules evaluation
  */
 export interface FieldControlState {
   visible: boolean;
