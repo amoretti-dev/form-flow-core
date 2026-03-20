@@ -50,6 +50,12 @@ export interface RuleOperatorMeta<TCustom extends string = never> {
   hideFromPicker?: boolean;
 }
 
+export type RuleOperatorMetaPatch<TCustom extends string = never> =
+  Partial<RuleOperatorMeta<TCustom>>;
+
+export type RuleOperatorPatches<TCustom extends string = never> =
+  Partial<Record<RuleOperatorKey, RuleOperatorMetaPatch<TCustom>>>;
+
 export type RuleOperatorsMap<TCustom extends string = never> =
   Partial<Record<RuleOperatorKey, RuleOperatorMeta<TCustom>>>;
 
