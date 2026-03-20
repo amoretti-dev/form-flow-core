@@ -34,6 +34,64 @@ pnpm add @form-flow/core
 
 ---
 
+## Breaking Changes v2.0.0
+
+### `FieldControlType` is now generic
+
+`FieldControlType` no longer represents only the built-in control types. It now accepts custom control types through a generic parameter.
+
+```ts
+type FieldControlType<TCustom extends string = never> =
+  BuiltInFieldControlType | Exclude<TCustom, BuiltInFieldControlType>;
+```
+
+This means:
+
+- use `BuiltInFieldControlType` when you need the built-in union only
+- use `FieldControlType<"myCustomType" | "anotherType">` for built-in + custom types
+- stop using `CustomFieldControlType` in new code; it is still exported only as a deprecated compatibility alias
+
+Migration examples:
+
+```ts
+// Before
+type BuiltInOnly = FieldControlType;
+type AllControls = CustomFieldControlType<"rating" | "currency">;
+
+// After
+type BuiltInOnly = BuiltInFieldControlType;
+type AllControls = FieldControlType<"rating" | "currency">;
+```
+
+Custom field definition example:
+
+```ts
+type AppFieldTypes = "switch" | "slider" | "radio";
+
+const fields: FieldDefinition<AppFieldTypes>[] = [
+
+];
+```
+
+If your code relied on `FieldControlType` being built-in only, this is a breaking change and you should migrate those usages to `BuiltInFieldControlType`.
+
+### `FORM_FLOW_OPERATORS_MAP` is no longer publicly exported
+
+The package root no longer exposes `FORM_FLOW_OPERATORS_MAP` as part of the public API.
+
+Use `FormFlowOperatorRegistry` instead:
+
+```ts
+import { FormFlowOperatorRegistry } from "@form-flow/core";
+
+const operators = FormFlowOperatorRegistry.getAll();
+const eqOperator = FormFlowOperatorRegistry.get("eq");
+```
+
+If you were importing `FORM_FLOW_OPERATORS_MAP` from `@form-flow/core`, this is a breaking change and you should migrate those usages to `FormFlowOperatorRegistry`.
+
+---
+
 ## 📖 Quick Start
 
 ### Basic Example
@@ -231,26 +289,37 @@ console.log(availableRules); // ["disabledIf", "readonlyIf"]
 ### Type Definitions
 
 ```ts
-type BaseFieldDefinition<T = any> = {
+type BuiltInFieldControlType =
+  | "text"
+  | "number"
+  | "date"
+  | "singleSelect"
+  | "multipleSelect"
+  | "checkbox";
+
+type FieldControlType<TCustom extends string = never> =
+  BuiltInFieldControlType | Exclude<TCustom, BuiltInFieldControlType>;
+
+type BaseFieldDefinition<TCustom extends string = never> = {
   id: string;
-  type: string;
+  type: FieldControlType<TCustom>;
   label: string;
 };
 
 // Field with conditional rules
-type FieldDefinition<T = any> = BaseFieldDefinition<T> & {
+type FieldDefinition<TCustom extends string = never> = BaseFieldDefinition<TCustom> & {
   visibleIf?: FieldRuleGroupDefinition;
   requiredIf?: FieldRuleGroupDefinition;
   disabledIf?: FieldRuleGroupDefinition;
   readonlyIf?: FieldRuleGroupDefinition;
 };
 
-type RuleContextFieldDefinition<T = any> = BaseFieldDefinition<T>;
+type RuleContextFieldDefinition<TCustom extends string = never> = BaseFieldDefinition<TCustom>;
 
-type FormFlowDefinition<T = any> = {
+type FormFlowDefinition<TCustom extends string = never> = {
   formId: string;
-  fields: FieldDefinition<T>[];
-  ruleContextFields?: RuleContextFieldDefinition<T>[];
+  fields: FieldDefinition<TCustom>[];
+  ruleContextFields?: RuleContextFieldDefinition<TCustom>[];
 };
 
 // Atomic rule
