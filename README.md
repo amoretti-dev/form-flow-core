@@ -34,7 +34,8 @@ pnpm add @form-flow/core
 
 ---
 
-## Breaking Changes v2.0.0
+
+## Breaking Changes v2.0.0 20/03/2026
 
 ### `FieldControlType` is now generic
 
@@ -89,6 +90,56 @@ const eqOperator = FormFlowOperatorRegistry.get("eq");
 ```
 
 If you were importing `FORM_FLOW_OPERATORS_MAP` from `@form-flow/core`, this is a breaking change and you should migrate those usages to `FormFlowOperatorRegistry`.
+
+---
+
+## 🆕 Patch Updates v2.x
+
+### `v2.0.1`
+
+- Improved type safety for `FormFlowOperatorRegistry.get()` and `FormFlowOperatorRegistry.getAll()`
+- Better generic inference when working with custom field control types
+
+### `v2.0.2`
+
+- Added `disallowedTypes` to `RuleOperatorMeta`
+- You can now keep an operator broadly available with `allowedTypes` and explicitly exclude specific control types
+
+```ts
+const operators = FormFlowOperatorRegistry.getAll<"switch">();
+
+operators.truthy = {
+  label: "Is truthy",
+  allowedTypes: "all",
+  disallowedTypes: ["switch"]
+};
+```
+
+### `v2.0.3`
+
+- Patch release for the `2.0.2` operator filtering improvements
+- No additional public API changes compared to `v2.0.2`
+
+### Next patch in current branch
+
+Based on the most recent commits after `v2.0.3`, the next `2.x` patch will also include:
+
+- `FormFlowOperatorRegistry.patch()` to partially override existing operators without redefining the full object
+- `FormFlowOperatorRegistry.excludeFieldTypes()` to exclude one or more field types from multiple operators in a single call
+
+```ts
+import { FormFlowOperatorRegistry } from "@form-flow/core";
+
+FormFlowOperatorRegistry.patch({
+  eq: { hideFromPicker: true },
+  neq: { hideFromPicker: true }
+});
+
+FormFlowOperatorRegistry.excludeFieldTypes(
+  ["switch"],
+  ["isTrue", "isFalse", "truthy"]
+);
+```
 
 ---
 
