@@ -40,6 +40,9 @@ export interface RuleOperatorMeta<TCustom extends string = never> {
   /** Which field types this operator is allowed for. */
   allowedTypes?: FieldControlType<TCustom>[] | "all";
 
+  /** Exclude field types by using this operator */
+  disallowedTypes?: FieldControlType<TCustom>[];
+
   /** The type of value this operator requires. */
   valueType?: RuleOperatorValueType;
 
