@@ -33,12 +33,12 @@ export type RuleOperatorValueType =
 /**
  * Metadata for describing how an operator behaves.
  */
-export interface RuleOperatorMeta {
+export interface RuleOperatorMeta<TCustom extends string = never> {
   /** Label to display in the UI (can be customized by consumers). */
   label: string;
 
   /** Which field types this operator is allowed for. */
-  allowedTypes?: FieldControlType[] | "all";
+  allowedTypes?: FieldControlType<TCustom>[] | "all";
 
   /** The type of value this operator requires. */
   valueType?: RuleOperatorValueType;
@@ -47,12 +47,14 @@ export interface RuleOperatorMeta {
   hideFromPicker?: boolean;
 }
 
+export type RuleOperatorsMap<TCustom extends string = never> =
+  Partial<Record<RuleOperatorKey, RuleOperatorMeta<TCustom>>>;
+
 /**
  * Default operator map shipped with `@form-flow/core`.
  * Consumers may override or extend this map at runtime.
  */
-export const FORM_FLOW_OPERATORS_MAP:
-  Partial<Record<RuleOperatorKey, RuleOperatorMeta>> = {
+export const FORM_FLOW_OPERATORS_MAP: RuleOperatorsMap = {
   eq: { label: 'Equals', allowedTypes: "all", valueType: "single" },
   neq: { label: 'Not equal to', allowedTypes: "all", valueType: "single" },
   gt: { label: 'Greater than', allowedTypes: ['number', 'date'], valueType: "single" },

@@ -1,25 +1,30 @@
 import { FieldRuleGroupDefinition } from './group';
 
-export type FieldControlType = 'text' | 'number' | 'date' | 'singleSelect' | 'multipleSelect' | 'checkbox';
+export type BuiltInFieldControlType =
+  | "text"
+  | "number"
+  | "date"
+  | "singleSelect"
+  | "multipleSelect"
+  | "checkbox";
+
+export type FieldControlType<TCustom extends string = never> =
+  BuiltInFieldControlType | Exclude<TCustom, BuiltInFieldControlType>;
+
+/** @deprecated Use FieldControlType<TCustom> */
 export type CustomFieldControlType<T extends string = never> =
   FieldControlType | Exclude<T, FieldControlType>;
 export type ConditionalFieldProperty = "visibleIf" | "requiredIf" | "disabledIf" | "readonlyIf";
-
-//TODO: valutare come esporre funzione per registrare tipi custom (e renderli disponibili nel FieldDefinition)
-// const registerCustomTypes = (...types: string[]) => {
-//   const newTypes = [types] as const;
-//   type Valid = typeof newTypes[number];
-// }
 
 export type FieldListOption = {
   label: string;
   value: any;
 } & Record<string, any>;
 
-export interface BaseFieldDefinition<TControl extends FieldControlType = FieldControlType> {
+export interface BaseFieldDefinition<TCustom extends string = never> {
   id: string;
   label: string;
-  type: TControl;
+  type: FieldControlType<TCustom>;
   metadata?: Record<string, any>;
 
   /**
@@ -46,8 +51,8 @@ export interface BaseFieldDefinition<TControl extends FieldControlType = FieldCo
   options?: FieldListOption[];
 }
 
-export interface FieldDefinition<TControl extends FieldControlType = FieldControlType>
-  extends BaseFieldDefinition<TControl> {
+export interface FieldDefinition<TCustom extends string = never>
+  extends BaseFieldDefinition<TCustom> {
   defaultValue?: any;
 
   // Optional logic-based rules
@@ -62,8 +67,8 @@ export interface FieldDefinition<TControl extends FieldControlType = FieldContro
  * It can be referenced inside conditions, but it is never evaluated as a target
  * control state by the core runtime.
  */
-export interface RuleContextFieldDefinition<TControl extends FieldControlType = FieldControlType>
-  extends BaseFieldDefinition<TControl> {}
+export interface RuleContextFieldDefinition<TCustom extends string = never>
+  extends BaseFieldDefinition<TCustom> { }
 
 
 /**

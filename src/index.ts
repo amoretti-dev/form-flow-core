@@ -30,7 +30,7 @@ export { RuleEvaluator as FormFlowRuleEvaluator } from './rule-evaluator';
 
 // 4. (Opzionale) operatori configurabili, se vuoi supportare override dal consumer
 export {
-    FORM_FLOW_OPERATORS_MAP,
+    // FORM_FLOW_OPERATORS_MAP,
     type RuleOperatorKey,
     type RuleOperatorMeta,
     type RuleOperatorValueType,

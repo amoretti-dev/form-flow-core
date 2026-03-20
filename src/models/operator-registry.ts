@@ -1,8 +1,8 @@
 // operator-registry.ts
-import { FORM_FLOW_OPERATORS_MAP, RuleOperatorKey, RuleOperatorMeta } from "./operators";
+import { FORM_FLOW_OPERATORS_MAP, RuleOperatorKey, RuleOperatorMeta, RuleOperatorsMap } from "./operators";
 
 // Mutable copy of the original operator map
-let registry: Partial<Record<RuleOperatorKey, RuleOperatorMeta>> = { ...FORM_FLOW_OPERATORS_MAP };
+let registry: RuleOperatorsMap = { ...FORM_FLOW_OPERATORS_MAP };
 
 export const OperatorRegistry = {
     /**
@@ -13,13 +13,13 @@ export const OperatorRegistry = {
     /**
      * Get all operator definitions (e.g., for building UI pickers).
      */
-    getAll: (): Partial<Record<RuleOperatorKey, RuleOperatorMeta>> => registry,
+    getAll: (): RuleOperatorsMap => registry,
 
     /**
      * Register one or more operator overrides or additions.
      * Existing operators with the same key will be replaced.
      */
-    register: (overrides: Partial<Record<RuleOperatorKey, RuleOperatorMeta>>) => {
+    register: (overrides: RuleOperatorsMap) => {
         registry = { ...registry, ...overrides };
     },
 
