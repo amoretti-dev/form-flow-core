@@ -23,6 +23,7 @@ export class RulesManager<TFieldControlType extends string = never> extends Stat
     private _state: InternalRulesManagerState<TFieldControlType>;
 
     getSnapshot = () => this.state;
+    
 
     private get _rule() {
         return this._state.field && this._state.ruleType ? this._state.field[this._state.ruleType] : undefined;

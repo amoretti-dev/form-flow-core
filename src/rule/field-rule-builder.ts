@@ -5,13 +5,13 @@ import { immerable, produce } from "immer";
 import { RuleHelper } from "@/utility/rule-helper";
 import { StateClass } from "@/models/shared";
 
-export type FieldRuleBuilderState<TFieldControlType extends string = never> = {
+export type FieldRuleBuilderState = {
     rootGroup: FieldRuleGroupDefinition;
     rules: FieldRuleDefinition[];
     groups: FieldRuleGroupDefinition[];
 }
 
-export class FieldRuleBuilder<TFieldControlType extends string = never> extends StateClass<FieldRuleBuilderState<TFieldControlType>> {
+export class FieldRuleBuilder<TFieldControlType extends string = never> extends StateClass<FieldRuleBuilderState> {
 
     [immerable] = true;
 
@@ -30,7 +30,7 @@ export class FieldRuleBuilder<TFieldControlType extends string = never> extends 
         this._rootGroup = rootGroup ?? RuleHelper.createGroup(ruleType);
     }
 
-    getSnapshot(): FieldRuleBuilderState<TFieldControlType> {
+    getSnapshot(): FieldRuleBuilderState {
         return {
             rootGroup: this._rootGroup,
             rules: this.rules,
