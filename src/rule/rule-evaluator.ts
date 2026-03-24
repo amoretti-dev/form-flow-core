@@ -1,7 +1,7 @@
-import { FieldControlState, FieldDefinition, FormControlState } from './models/field-definition';
-import { DependencyGraph } from './dependency-graph';
+import { FieldControlState, FieldDefinition, FormControlState } from '../models/field-definition';
+import { DependencyGraph } from '../dependency-graph';
 import jsonLogic, { RulesLogic } from 'json-logic-js';
-import { RuleMapper } from './utility/rule-mapper';
+import { RuleMapper } from '../utility/rule-mapper';
 
 export class RuleEvaluator {
 

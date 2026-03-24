@@ -6,7 +6,12 @@ export type BuiltInFieldControlType =
   | "date"
   | "singleSelect"
   | "multipleSelect"
-  | "checkbox";
+  | "checkbox"
+  | "switch"
+  | "slider"
+  | "radio";
+
+export type BuiltInPrimitivesValues = "text" | "number" | "date" | "boolean" | "list" | "null" | "undefined";
 
 export type FieldControlType<TCustom extends string = never> =
   BuiltInFieldControlType | Exclude<TCustom, BuiltInFieldControlType>;
@@ -14,6 +19,7 @@ export type FieldControlType<TCustom extends string = never> =
 /** @deprecated Use FieldControlType<TCustom> */
 export type CustomFieldControlType<T extends string = never> =
   FieldControlType | Exclude<T, FieldControlType>;
+
 export type ConditionalFieldProperty = "visibleIf" | "requiredIf" | "disabledIf" | "readonlyIf";
 
 export type FieldListOption = {
@@ -80,4 +86,5 @@ export interface FieldControlState {
   disabled: boolean;
   readonly: boolean;
 }
+
 export type FormControlState = Record<string, FieldControlState>;

@@ -1,4 +1,4 @@
-import { CustomFieldControlType, FieldDefinition, RuleContextFieldDefinition } from "./field-definition";
+import { FieldDefinition, RuleContextFieldDefinition } from "./field-definition";
 
 export type FormFlowValues = Record<string, any>;
 

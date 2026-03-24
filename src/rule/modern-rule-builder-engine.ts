@@ -1,5 +1,5 @@
 import { RulesLogic } from "json-logic-js";
-import { RuleBuilder } from "./rule-builder"; // Il tuo codice esistente
+import { EngineRuleFactory } from "./rule/engine-rule-factory";
 
 // Interfaccia per i metodi di condizione
 interface ConditionMethods {
@@ -41,92 +41,92 @@ class RuleCondition implements RuleChain {
 
     // Metodi di condizione
     eq(value: any): RuleChain {
-        this.rules.push(RuleBuilder.value.eq(this.field, value));
+        this.rules.push(EngineRuleFactory.value.eq(this.field, value));
         return this;
     }
 
     neq(value: any): RuleChain {
-        this.rules.push(RuleBuilder.value.neq(this.field, value));
+        this.rules.push(EngineRuleFactory.value.neq(this.field, value));
         return this;
     }
 
     gt(value: any): RuleChain {
-        this.rules.push(RuleBuilder.value.gt(this.field, value));
+        this.rules.push(EngineRuleFactory.value.gt(this.field, value));
         return this;
     }
 
     gte(value: any): RuleChain {
-        this.rules.push(RuleBuilder.value.gte(this.field, value));
+        this.rules.push(EngineRuleFactory.value.gte(this.field, value));
         return this;
     }
 
     lt(value: any): RuleChain {
-        this.rules.push(RuleBuilder.value.lt(this.field, value));
+        this.rules.push(EngineRuleFactory.value.lt(this.field, value));
         return this;
     }
 
     lte(value: any): RuleChain {
-        this.rules.push(RuleBuilder.value.lte(this.field, value));
+        this.rules.push(EngineRuleFactory.value.lte(this.field, value));
         return this;
     }
 
     in(array: any[]): RuleChain {
-        this.rules.push(RuleBuilder.value.in(this.field, array));
+        this.rules.push(EngineRuleFactory.value.in(this.field, array));
         return this;
     }
 
     isEmpty(): RuleChain {
-        this.rules.push(RuleBuilder.value.isEmpty(this.field));
+        this.rules.push(EngineRuleFactory.value.isEmpty(this.field));
         return this;
     }
 
     isNotEmpty(): RuleChain {
-        this.rules.push(RuleBuilder.value.isNotEmpty(this.field));
+        this.rules.push(EngineRuleFactory.value.isNotEmpty(this.field));
         return this;
     }
 
     isTrue(): RuleChain {
-        this.rules.push(RuleBuilder.value.isTrue(this.field));
+        this.rules.push(EngineRuleFactory.value.isTrue(this.field));
         return this;
     }
 
     isFalse(): RuleChain {
-        this.rules.push(RuleBuilder.value.isFalse(this.field));
+        this.rules.push(EngineRuleFactory.value.isFalse(this.field));
         return this;
     }
 
     startsWith(prefix: string): RuleChain {
-        this.rules.push(RuleBuilder.value.startsWith(this.field, prefix));
+        this.rules.push(EngineRuleFactory.value.startsWith(this.field, prefix));
         return this;
     }
 
     contains(value: string): RuleChain {
-        this.rules.push(RuleBuilder.value.contains(this.field, value));
+        this.rules.push(EngineRuleFactory.value.contains(this.field, value));
         return this;
     }
 
     endsWith(suffix: string): RuleChain {
-        this.rules.push(RuleBuilder.value.endsWith(this.field, suffix));
+        this.rules.push(EngineRuleFactory.value.endsWith(this.field, suffix));
         return this;
     }
 
     dateAfter(date: string): RuleChain {
-        this.rules.push(RuleBuilder.value.dateAfter(this.field, date));
+        this.rules.push(EngineRuleFactory.value.dateAfter(this.field, date));
         return this;
     }
 
     dateBefore(date: string): RuleChain {
-        this.rules.push(RuleBuilder.value.dateBefore(this.field, date));
+        this.rules.push(EngineRuleFactory.value.dateBefore(this.field, date));
         return this;
     }
 
     lengthEquals(length: number): RuleChain {
-        this.rules.push(RuleBuilder.value.lengthEquals(this.field, length));
+        this.rules.push(EngineRuleFactory.value.lengthEquals(this.field, length));
         return this;
     }
 
     truthy(): RuleChain {
-        this.rules.push(RuleBuilder.value.truthy(this.field));
+        this.rules.push(EngineRuleFactory.value.truthy(this.field));
         return this;
     }
 
@@ -147,9 +147,9 @@ class RuleCondition implements RuleChain {
         }
 
         if (this.currentOperator === 'and') {
-            return RuleBuilder.group.and(...this.rules);
+            return EngineRuleFactory.group.and(...this.rules);
         } else {
-            return RuleBuilder.group.or(...this.rules);
+            return EngineRuleFactory.group.or(...this.rules);
         }
     }
 
@@ -217,9 +217,9 @@ export class RuleGroupBuilder {
         }
 
         if (this.operator === 'and') {
-            return RuleBuilder.group.and(...this.rules);
+            return EngineRuleFactory.group.and(...this.rules);
         } else {
-            return RuleBuilder.group.or(...this.rules);
+            return EngineRuleFactory.group.or(...this.rules);
         }
     }
 }

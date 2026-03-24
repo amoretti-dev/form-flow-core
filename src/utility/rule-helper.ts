@@ -1,5 +1,9 @@
+import { BaseFieldDefinition, ConditionalFieldProperty } from "@/models/field-definition";
 import { FieldRuleGroupDefinition, FieldRuleNode } from "../models/group";
 import { FieldRuleDefinition } from "../models/rule";
+import { generateId } from "./id-helper";
+import { FieldHelper } from "./field-helper";
+
 
 export class RuleHelper {
     // Funzione privata per verificare se l'elemento è un gruppo
@@ -43,5 +47,23 @@ export class RuleHelper {
         }
 
         return undefined;
+    }
+
+    static createGroup(ruleType: ConditionalFieldProperty): FieldRuleGroupDefinition {
+        return {
+            groupId: generateId(),
+            operator: "and",
+            ruleType: ruleType,
+            rules: [],
+        };
+    }
+
+    static createRule<TFieldType extends string = never>(field: BaseFieldDefinition<TFieldType>): FieldRuleDefinition {
+        return {
+            ruleId: generateId(),
+            conditionFieldId: field.id,
+            operator: "eq",
+            value: FieldHelper.getDefaultValue<TFieldType>(field.type),
+        }
     }
 }

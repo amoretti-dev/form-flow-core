@@ -1,9 +1,9 @@
-import { RuleBuilder } from "../rule-builder";
+import { EngineRuleFactory } from "../rule/engine-rule-factory";
 import { FieldControlType } from "./field-definition";
 /**
- * Base operators defined inside RuleBuilder.
+ * Base operators defined inside EngineRuleFactory.
  */
-type RuleOperatorBase = keyof typeof RuleBuilder.value;
+type RuleOperatorBase = keyof typeof EngineRuleFactory.value;
 
 /**
  * Special operator that represents a field reference.
@@ -84,5 +84,4 @@ export const FORM_FLOW_OPERATORS_MAP: RuleOperatorsMap = {
   lengthEquals: { label: 'Length equals', allowedTypes: ['text'], valueType: "single" },
   truthy: { label: 'Is truthy', allowedTypes: ['checkbox'], valueType: "none" },
 };
-
 

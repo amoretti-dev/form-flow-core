@@ -3,6 +3,7 @@ module.exports = {
   testEnvironment: "node",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1", // Mappa gli alias TypeScript a percorsi reali
+    "^uuid$": "<rootDir>/__tests__/mocks/uuid.ts",
   },
   globals: {
     "ts-jest": {

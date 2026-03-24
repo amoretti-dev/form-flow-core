@@ -2,24 +2,26 @@ import { RulesLogic } from "json-logic-js";
 import { FieldRuleGroupDefinition } from "../models/group";
 import { FieldRuleDefinition } from "../models/rule";
 import { RuleHelper } from "./rule-helper";
-import { RuleBuilder } from "../rule-builder";
+import { EngineRuleFactory } from "../rule/engine-rule-factory";
 
 export class RuleMapper {
   // Mappare il gruppo principale con tutte le regole e i gruppi annidati
   static mapGroupToEngine(group: FieldRuleGroupDefinition): RulesLogic {
     const groupedRules = this.extractRulesFromGroup(group);
 
-    // Se il gruppo contiene solo una regola, la mappiamo direttamente
+    // Se il gruppo contiene solo una regola, preserviamo comunque l'eventuale negazione del gruppo.
     if (groupedRules.length === 1) {
-      return groupedRules[0];
+      return group.not
+        ? EngineRuleFactory.group.not(groupedRules[0])
+        : groupedRules[0];
     }
 
     // Se ci sono più regole, combiniamo con l'operatore AND/OR
-    const engineGroup = RuleBuilder.group[group.operator];
+    const engineGroup = EngineRuleFactory.group[group.operator];
     const engineRule = engineGroup(...groupedRules);
 
     if (group.not) {
-      return RuleBuilder.group.not(engineRule);
+      return EngineRuleFactory.group.not(engineRule);
     }
 
     return engineRule;
@@ -31,17 +33,21 @@ export class RuleMapper {
   ): RulesLogic {
     const groupedRules = this.extractRulesFromGroup(group);
 
-    // Se il gruppo contiene solo una regola, la mappiamo direttamente
+    // Se il gruppo contiene solo una regola, preserviamo comunque l'eventuale negazione del gruppo.
     if (groupedRules.length === 1) {
-      return callback(group, groupedRules);
+      const singleRule = group.not
+        ? EngineRuleFactory.group.not(groupedRules[0])
+        : groupedRules[0];
+
+      return callback(group, [singleRule]);
     }
 
     // Se ci sono più regole, combiniamo con l'operatore AND/OR
-    const engineGroup = RuleBuilder.group[group.operator];
+    const engineGroup = EngineRuleFactory.group[group.operator];
     const engineRule = engineGroup(...groupedRules);
 
     if (group.not) {
-      return callback(group, [RuleBuilder.group.not(engineRule)]);
+      return callback(group, [EngineRuleFactory.group.not(engineRule)]);
     }
 
     return callback(group, [engineRule]);
@@ -64,7 +70,7 @@ export class RuleMapper {
 
   // Mappatura di una singola regola
   static mapRuleToEngine(rule: FieldRuleDefinition): RulesLogic {
-    const engineRule = RuleBuilder.value[rule.operator];
+    const engineRule = EngineRuleFactory.value[rule.operator];
 
     let logic: RulesLogic;
     if (rule.operator == "var") {
@@ -76,7 +82,7 @@ export class RuleMapper {
     }
 
     if (rule.not) {
-      return RuleBuilder.group.not(logic);
+      return EngineRuleFactory.group.not(logic);
     }
 
     return logic;
@@ -87,7 +93,7 @@ export class RuleMapper {
     rule: FieldRuleDefinition,
     callback: (rule: FieldRuleDefinition, logic: RulesLogic) => RulesLogic
   ): RulesLogic {
-    const engineRule = RuleBuilder.value[rule.operator];
+    const engineRule = EngineRuleFactory.value[rule.operator];
 
     let logic: RulesLogic;
     if (rule.operator == "var") {
@@ -99,7 +105,7 @@ export class RuleMapper {
     }
 
     if (rule.not) {
-      logic = RuleBuilder.group.not(logic);
+      logic = EngineRuleFactory.group.not(logic);
     }
 
     // Applica la callback per il formato personalizzato
