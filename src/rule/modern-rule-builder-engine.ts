@@ -1,5 +1,5 @@
 import { RulesLogic } from "json-logic-js";
-import { EngineRuleFactory } from "./rule/engine-rule-factory";
+import { EngineRuleFactory } from "./engine-rule-factory";
 
 // Interfaccia per i metodi di condizione
 interface ConditionMethods {
