@@ -1,10 +1,18 @@
-import { FieldDefinition, ConditionalFieldProperty } from "@/models/field-definition";
+import { FieldDefinition, ConditionalFieldProperty, RuleContextFieldDefinition } from "@/models/field-definition";
 import { FieldRuleGroupDefinition, FieldRuleNode, LogicalOperator } from "@/models/group";
 import { FieldRuleDefinition } from "@/models/rule";
 import { immerable, produce } from "immer";
 import { RuleHelper } from "@/utility/rule-helper";
+import { StateClass } from "@/models/shared";
 
-export class FieldRuleBuilder<TFieldControlType extends string = never> {
+export type FieldRuleBuilderState<TFieldControlType extends string = never> = {
+    rootGroup: FieldRuleGroupDefinition;
+    rules: FieldRuleDefinition[];
+    groups: FieldRuleGroupDefinition[];
+}
+
+export class FieldRuleBuilder<TFieldControlType extends string = never> extends StateClass<FieldRuleBuilderState<TFieldControlType>> {
+
     [immerable] = true;
 
     private _field: FieldDefinition<TFieldControlType>;
@@ -14,12 +22,23 @@ export class FieldRuleBuilder<TFieldControlType extends string = never> {
     constructor(
         field: FieldDefinition<TFieldControlType>,
         ruleType: ConditionalFieldProperty = "visibleIf",
-        rootGroup?: FieldRuleGroupDefinition
+        rootGroup?: FieldRuleGroupDefinition,
     ) {
+        super();
         this._field = field;
         this._ruleType = ruleType;
         this._rootGroup = rootGroup ?? RuleHelper.createGroup(ruleType);
     }
+
+    getSnapshot(): FieldRuleBuilderState<TFieldControlType> {
+        return {
+            rootGroup: this._rootGroup,
+            rules: this.rules,
+            groups: this.groups
+        }
+    }
+    get rules() { return RuleHelper.getRules(this._rootGroup) };
+    get groups() { return RuleHelper.getGroups(this._rootGroup) };
 
     updateRootGroup(recipe: (draft: FieldRuleGroupDefinition) => void) {
         this._rootGroup = produce(this._rootGroup, recipe);
