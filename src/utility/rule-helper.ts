@@ -1,4 +1,4 @@
-import { BaseFieldDefinition, ConditionalFieldProperty } from "@/models/field-definition";
+import { BaseFieldDefinition, ConditionalFieldProperty } from "../models/field-definition";
 import { FieldRuleGroupDefinition, FieldRuleNode } from "../models/group";
 import { FieldRuleDefinition } from "../models/rule";
 import { generateId } from "./id-helper";

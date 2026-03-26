@@ -20,6 +20,7 @@ export type FieldControlType<TCustom extends string = never> =
 export type CustomFieldControlType<T extends string = never> =
   FieldControlType | Exclude<T, FieldControlType>;
 
+export const conditionalFieldPropertiesArray: ConditionalFieldProperty[] = ["visibleIf", "requiredIf", "disabledIf", "readonlyIf", ]
 export type ConditionalFieldProperty = "visibleIf" | "requiredIf" | "disabledIf" | "readonlyIf";
 
 export type FieldListOption = {
@@ -59,7 +60,6 @@ export interface BaseFieldDefinition<TCustom extends string = never> {
 
 export interface FieldDefinition<TCustom extends string = never>
   extends BaseFieldDefinition<TCustom> {
-  defaultValue?: any;
 
   // Optional logic-based rules
   visibleIf?: FieldRuleGroupDefinition;

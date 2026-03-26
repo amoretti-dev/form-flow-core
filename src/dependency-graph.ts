@@ -1,4 +1,4 @@
-import { FieldDefinition, RuleContextFieldDefinition } from './models/field-definition';
+import { conditionalFieldPropertiesArray, FieldDefinition, RuleContextFieldDefinition } from './models/field-definition';
 import { FormFlowDefinition } from './models/form-definition';
 import { FieldRuleNode } from './models/group';
 import { RuleHelper } from './utility/rule-helper';
@@ -29,9 +29,8 @@ export class DependencyGraph {
             const dependencies = new Set<string>();
 
             // Estrazione delle dipendenze dalle regole
-            const fieldRules = ['visibleIf', 'requiredIf', 'disabledIf', 'readonlyIf'];
-            fieldRules.forEach(ruleName => {
-                const rule = field[ruleName as keyof FieldDefinition];
+            conditionalFieldPropertiesArray.forEach(ruleName => {
+                const rule = field[ruleName];
 
                 if (rule) {
                     this.extractDependencies(rule, dependencies);

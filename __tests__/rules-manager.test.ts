@@ -1,7 +1,6 @@
 import type { FieldDefinition } from "../src/models/field-definition";
 import type { FieldRuleGroupDefinition } from "../src/models/group";
-import { RuleGenerator } from "../src/rule/generator";
-
+import { RulesManager } from '../src/rule/rules-manager';
 const createGroup = (
   ruleType: FieldRuleGroupDefinition["ruleType"] = "visibleIf",
 ): FieldRuleGroupDefinition => ({
@@ -32,13 +31,13 @@ const createFields = (): FieldDefinition[] => [
   },
 ];
 
-describe("RuleGenerator", () => {
+describe("RulesManager", () => {
   it("selects a field rule and exposes it through currentRule", () => {
-    const generator = new RuleGenerator(createFields());
+    const generator = new RulesManager(createFields());
 
     generator.selectFieldRule("name", "visibleIf");
 
-    expect(generator.currentRule).toEqual({
+    expect(generator.state).toEqual({
       field: generator.form.fields[0],
       ruleType: "visibleIf",
       isTest: false,
@@ -47,12 +46,12 @@ describe("RuleGenerator", () => {
   });
 
   it("deselects the current field rule when the same rule is selected with deselect=true", () => {
-    const generator = new RuleGenerator(createFields());
+    const generator = new RulesManager(createFields());
 
     generator.selectFieldRule("name", "visibleIf");
     generator.selectFieldRule("name", "visibleIf", true);
 
-    expect(generator.currentRule).toEqual({
+    expect(generator.state).toEqual({
       field: undefined,
       ruleType: undefined,
       isTest: false,
@@ -61,11 +60,11 @@ describe("RuleGenerator", () => {
   });
 
   it("selects and deselects test mode for a field", () => {
-    const generator = new RuleGenerator(createFields());
+    const generator = new RulesManager(createFields());
 
     generator.selectFieldTest("name");
 
-    expect(generator.currentRule).toEqual({
+    expect(generator.state).toEqual({
       field: generator.form.fields[0],
       ruleType: undefined,
       isTest: true,
@@ -74,7 +73,7 @@ describe("RuleGenerator", () => {
 
     generator.selectFieldTest("name", true);
 
-    expect(generator.currentRule).toEqual({
+    expect(generator.state).toEqual({
       field: undefined,
       ruleType: undefined,
       isTest: false,
@@ -84,7 +83,7 @@ describe("RuleGenerator", () => {
 
   it("creates a new rule group on the target field", () => {
     const fields = createFields();
-    const generator = new RuleGenerator(fields);
+    const generator = new RulesManager(fields);
 
     const createdGroup = generator.createRule(fields[1], "requiredIf");
 
@@ -105,7 +104,7 @@ describe("RuleGenerator", () => {
   });
 
   it("deletes an existing rule group from the target field", () => {
-    const generator = new RuleGenerator([
+    const generator = new RulesManager([
       {
         id: "email",
         label: "Email",
@@ -120,7 +119,7 @@ describe("RuleGenerator", () => {
   });
 
   it("keeps the selected field in sync after updateField replaces the form state", () => {
-    const generator = new RuleGenerator(createFields());
+    const generator = new RulesManager(createFields());
     const updatedGroup = createGroup("visibleIf");
     const updatedField: FieldDefinition = {
       ...generator.form.fields[0],
@@ -131,12 +130,13 @@ describe("RuleGenerator", () => {
     generator.selectFieldRule("name", "visibleIf");
     generator.updateField(updatedField);
 
-    expect(generator.currentRule).toEqual({
+    expect(generator.state).toEqual({
       field: generator.form.fields[0],
       ruleType: "visibleIf",
       isTest: false,
       rule: updatedGroup,
     });
-    expect(generator.currentRule.field?.label).toBe("Full name");
+    expect(generator.state.field?.label).toBe("Full name");
   });
+
 });

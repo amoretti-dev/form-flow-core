@@ -1,7 +1,16 @@
-import { FormFlow } from "@/models/config";
-import { FieldDefinition, ConditionalFieldProperty, FieldControlType } from "@/models/field-definition";
+import { FormFlow } from "../models/config";
+import { FieldDefinition, ConditionalFieldProperty, FieldControlType } from "../models/field-definition";
 
 export class FieldHelper {
+
+    static getFieldById<TCustom extends string = never>(fields: FieldDefinition<TCustom>[], id: string) {
+        return fields.find(f => f.id === id);
+    }
+
+    static getFieldIndex<TCustom extends string = never>(fields: FieldDefinition<TCustom>[], id: string) {
+        return fields.findIndex(f => f.id === id);
+    }
+
     static getAvailableRuleTypes(field: FieldDefinition): ConditionalFieldProperty[] {
         var types: ConditionalFieldProperty[] = ["visibleIf", "disabledIf", "requiredIf", "readonlyIf"];
         return types.filter(k => field[k] == undefined);
