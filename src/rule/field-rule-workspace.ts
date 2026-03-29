@@ -7,160 +7,158 @@ import { FieldRuleGroupDefinition } from "../models/group";
 import { StateClass } from "../models/shared";
 import { FieldHelper } from "../utility/field-helper";
 
-type InternalRulesManagerState<TFieldControlType extends string = never> = {
+export type RulesManagerState<TFieldControlType extends string = never> = {
     field: FieldDefinition<TFieldControlType> | undefined;
     ruleType: ConditionalFieldProperty | undefined;
     isTest: boolean;
     rule: FieldRuleGroupDefinition | undefined;
 }
 
-export type RulesManagerState<TFieldControlType extends string = never> = InternalRulesManagerState<TFieldControlType>;
-
 export type RulesManagerHelpersResult<TFieldControlType extends string = never> = {
     form: FormFlowDefinition<TFieldControlType>;
     state: RulesManagerState<TFieldControlType>;
 }
 
-export class RulesManager<TFieldControlType extends string = never>
-    extends StateClass<RulesManagerState<TFieldControlType>> {
-    [immerable] = true;
+// export class RulesManager<TFieldControlType extends string = never>
+//     extends StateClass<RulesManagerState<TFieldControlType>> {
+//     [immerable] = true;
 
-    private _form: FormFlowDefinition<TFieldControlType>;
-    private _state: InternalRulesManagerState<TFieldControlType>;
+//     private _form: FormFlowDefinition<TFieldControlType>;
+//     private _state: InternalRulesManagerState<TFieldControlType>;
 
-    getSnapshot = () => this.state;
+//     getSnapshot = () => this.state;
 
-    get state() {
-        return this._state;
-    }
+//     get state() {
+//         return this._state;
+//     }
 
-    constructor(
-        fields: FieldDefinition<TFieldControlType>[],
-        formId?: string,
-        ruleContextFields?: RuleContextFieldDefinition<TFieldControlType>[],
-        metadata?: Record<string, any>,
-        field?: FieldDefinition<TFieldControlType>,
-        ruleType?: ConditionalFieldProperty,
-        isTest: boolean = false
-    ) {
-        super()
-        this._form = { formId: formId ?? uuidv4(), ruleContextFields, fields, metadata }
-        const rule = field && ruleType ? field[ruleType] : undefined;
-        this._state = {
-            field,
-            ruleType,
-            rule,
-            isTest
-        }
-    }
+//     constructor(
+//         fields: FieldDefinition<TFieldControlType>[],
+//         formId?: string,
+//         ruleContextFields?: RuleContextFieldDefinition<TFieldControlType>[],
+//         metadata?: Record<string, any>,
+//         field?: FieldDefinition<TFieldControlType>,
+//         ruleType?: ConditionalFieldProperty,
+//         isTest: boolean = false
+//     ) {
+//         super()
+//         this._form = { formId: formId ?? uuidv4(), ruleContextFields, fields, metadata }
+//         const rule = field && ruleType ? field[ruleType] : undefined;
+//         this._state = {
+//             field,
+//             ruleType,
+//             rule,
+//             isTest
+//         }
+//     }
 
-    getFieldById = (fieldId: string) =>
-        this._form.fields.find((f) => f.id == fieldId);
+//     getFieldById = (fieldId: string) =>
+//         this._form.fields.find((f) => f.id == fieldId);
 
-    getFieldIndex = (fieldId: string) =>
-        this._form.fields.findIndex((f) => f.id == fieldId);
+//     getFieldIndex = (fieldId: string) =>
+//         this._form.fields.findIndex((f) => f.id == fieldId);
 
-    updateField = (field: FieldDefinition<TFieldControlType>) => {
-        const fieldIndex = this.getFieldIndex(field.id);
-        if (fieldIndex < 0) return;
+//     updateField = (field: FieldDefinition<TFieldControlType>) => {
+//         const fieldIndex = this.getFieldIndex(field.id);
+//         if (fieldIndex < 0) return;
 
-        this.updateForm(prev => {
-            prev.fields[fieldIndex] = castDraft(field);
-        });
-    }
+//         this.updateForm(prev => {
+//             prev.fields[fieldIndex] = castDraft(field);
+//         });
+//     }
 
-    updateForm(recipe: (draft: Draft<FormFlowDefinition<TFieldControlType>>) => void) {
-        this._form = produce(this._form, recipe);
-        this._updateState((draft) => {
-            if (!draft.field) return;
+//     updateForm(recipe: (draft: Draft<FormFlowDefinition<TFieldControlType>>) => void) {
+//         this._form = produce(this._form, recipe);
+//         this._updateState((draft) => {
+//             if (!draft.field) return;
 
-            draft.field = castDraft(this.getFieldById(draft.field.id));
-        }, false);
-        this.emit();
-    }
+//             draft.field = castDraft(this.getFieldById(draft.field.id));
+//         }, false);
+//         this.emit();
+//     }
 
-    private _updateState(
-        recipe: (draft: Draft<InternalRulesManagerState<TFieldControlType>>) => void,
-        emit: boolean = true,
-    ) {
-        this._state = produce(this._state, draft => {
-            recipe(draft);
-            draft.rule = draft.field && draft.ruleType ? draft.field[draft.ruleType] : undefined;
-        });
+//     private _updateState(
+//         recipe: (draft: Draft<InternalRulesManagerState<TFieldControlType>>) => void,
+//         emit: boolean = true,
+//     ) {
+//         this._state = produce(this._state, draft => {
+//             recipe(draft);
+//             draft.rule = draft.field && draft.ruleType ? draft.field[draft.ruleType] : undefined;
+//         });
 
-        if (emit) {
-            this.emit();
-        }
-    }
+//         if (emit) {
+//             this.emit();
+//         }
+//     }
 
-    get form() { return this._form; }
+//     get form() { return this._form; }
 
-    /**
-     * Selects the given rule for the specified field.
-     *
-     * @param deselect - Defaults to `false`. When `true`, clicking the same rule on the same field
-     * deselects the current selection instead of selecting it again.
-    */
-    selectFieldRule = (fieldId: string, ruleType: ConditionalFieldProperty, deselect?: boolean) => {
-        const field = this.getFieldById(fieldId);
-        if (!field) return;
+//     /**
+//      * Selects the given rule for the specified field.
+//      *
+//      * @param deselect - Defaults to `false`. When `true`, clicking the same rule on the same field
+//      * deselects the current selection instead of selecting it again.
+//     */
+//     selectFieldRule = (fieldId: string, ruleType: ConditionalFieldProperty, deselect?: boolean) => {
+//         const field = this.getFieldById(fieldId);
+//         if (!field) return;
 
-        if (deselect && field.id === this._state.field?.id && this._state.ruleType === ruleType) {
-            this.deselectFieldRule();
-            return;
-        }
+//         if (deselect && field.id === this._state.field?.id && this._state.ruleType === ruleType) {
+//             this.deselectFieldRule();
+//             return;
+//         }
 
-        this._updateState(draft => {
-            draft.field = castDraft(field);
-            draft.ruleType = ruleType;
-            draft.isTest = false;
-        })
-    }
+//         this._updateState(draft => {
+//             draft.field = castDraft(field);
+//             draft.ruleType = ruleType;
+//             draft.isTest = false;
+//         })
+//     }
 
-    selectFieldTest = (fieldId: string, deselect?: boolean) => {
-        const field = this.getFieldById(fieldId);
-        if (!field) return;
+//     selectFieldTest = (fieldId: string, deselect?: boolean) => {
+//         const field = this.getFieldById(fieldId);
+//         if (!field) return;
 
-        if (deselect && field.id === this._state.field?.id && !this._state.ruleType) {
-            this.deselectFieldRule();
-            return;
-        }
+//         if (deselect && field.id === this._state.field?.id && !this._state.ruleType) {
+//             this.deselectFieldRule();
+//             return;
+//         }
 
-        this._updateState(draft => {
-            draft.field = castDraft(field);
-            draft.ruleType = undefined;
-            draft.isTest = true;
-        })
-    }
+//         this._updateState(draft => {
+//             draft.field = castDraft(field);
+//             draft.ruleType = undefined;
+//             draft.isTest = true;
+//         })
+//     }
 
-    deselectFieldRule = () => {
-        this._updateState(draft => {
-            draft.field = undefined;
-            draft.ruleType = undefined;
-            draft.isTest = false;
-        })
-    }
+//     deselectFieldRule = () => {
+//         this._updateState(draft => {
+//             draft.field = undefined;
+//             draft.ruleType = undefined;
+//             draft.isTest = false;
+//         })
+//     }
 
-    createRule = (field: FieldDefinition<TFieldControlType>, ruleType: ConditionalFieldProperty) => {
-        const emptyGroup = RuleHelper.createGroup(ruleType);
-        const emptyRule = RuleHelper.createRule<TFieldControlType>(field);
-        emptyGroup.rules.push(emptyRule);
+//     createRule = (field: FieldDefinition<TFieldControlType>, ruleType: ConditionalFieldProperty) => {
+//         const emptyGroup = RuleHelper.createGroup(ruleType);
+//         const emptyRule = RuleHelper.createRule<TFieldControlType>(field);
+//         emptyGroup.rules.push(emptyRule);
 
-        const updatedField = { ...field, [ruleType]: emptyGroup }
-        this.updateField(updatedField);
-        return emptyGroup;
-    }
+//         const updatedField = { ...field, [ruleType]: emptyGroup }
+//         this.updateField(updatedField);
+//         return emptyGroup;
+//     }
 
-    deleteRule = (fieldId: string, ruleType: ConditionalFieldProperty) => {
-        const field = this.getFieldById(fieldId);
-        if (!field) return;
+//     deleteRule = (fieldId: string, ruleType: ConditionalFieldProperty) => {
+//         const field = this.getFieldById(fieldId);
+//         if (!field) return;
 
-        const updatedField = { ...field, [ruleType]: undefined }
-        this.updateField(updatedField);
-    }
-}
+//         const updatedField = { ...field, [ruleType]: undefined }
+//         this.updateField(updatedField);
+//     }
+// }
 
-export const createRulesManagerHelpers = <TFieldControlType extends string = never>() => {
+export const createFieldRuleWorkspaceHelpers = <TFieldControlType extends string = never>() => {
     const getRule = (
         field?: FieldDefinition<TFieldControlType>,
         ruleType?: ConditionalFieldProperty,

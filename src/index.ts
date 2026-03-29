@@ -2,7 +2,7 @@
 
 // 1. Tipi di campo e strutture
 export {
-    // type BaseFieldDefinition,
+    type BaseFieldDefinition,
     type FieldControlType,
     type FieldDefinition,
     type ConditionalFieldProperty,
@@ -24,13 +24,13 @@ export {
 } from './models/group';
 export { type FieldRuleDefinition } from './models/rule';
 export {
-    type FieldRuleBuilderHelpersResult,
-    type FieldRuleBuilderState,
-} from './rule/field-rule-builder';
+    type RuleNodeHelpersResult,
+    type RuleNodeState,
+} from './rule/rule-node';
 export {
     type RulesManagerHelpersResult,
     type RulesManagerState,
-} from './rule/rules-manager';
+} from './rule/field-rule-workspace';
 
 // 3. Valutatore ufficiale del sistema
 export { RuleEvaluator as FormFlowRuleEvaluator } from './rule/rule-evaluator';
@@ -42,17 +42,11 @@ export {
     type RuleOperatorValueType,
 } from './models/operators';
 
-export {OperatorRegistry as FormFlowOperatorRegistry} from './models/operator-registry';
+export { OperatorRegistry as FormFlowOperatorRegistry } from './models/operator-registry';
 export { DependencyGraph as FormFlowDependencyGraph } from './dependency-graph';
 export { EngineRuleFactory as FormFlowEngineRuleFactory } from './rule/engine-rule-factory';
-export {
-    FieldRuleBuilder as FormFlowFieldRuleBuilder,
-    createFieldRuleBuilderHelpers as createFormFlowFieldRuleBuilderHelpers,
-} from './rule/field-rule-builder';
-export {
-    RulesManager as FormFlowRulesManager,
-    createRulesManagerHelpers as createFormFlowRulesManagerHelpers,
-} from './rule/rules-manager';
+export { createRuleNodeHelpers } from './rule/rule-node';
+export { createFieldRuleWorkspaceHelpers } from './rule/field-rule-workspace';
 export { RuleMapper as FormFlowRuleMapper } from './utility/rule-mapper';
 export { RuleHelper as FormFlowRuleHelper } from './utility/rule-helper';
 export { FieldHelper as FormFlowFieldHelper } from './utility/field-helper';
