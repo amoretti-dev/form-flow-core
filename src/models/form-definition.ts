@@ -7,7 +7,14 @@ export interface FormFlowDefinition<TCustom extends string = never> {
     fields: FieldDefinition<TCustom>[];
     ruleContextFields?: RuleContextFieldDefinition<TCustom>[];
     metadata?: Record<string, any>;
+    fieldGroups?: FormFlowFieldGroup[];
 }
+
+export type FormFlowFieldGroup = {
+    id: string;
+    label: string;
+    fieldIds: string[];
+};
 
 export interface FormFlowSchema<TCustom extends string = never> {
     definition: FormFlowDefinition<TCustom>
