@@ -50,3 +50,4 @@ export { createFieldRuleWorkspaceHelpers } from './rule/field-rule-workspace';
 export { RuleMapper as FormFlowRuleMapper } from './utility/rule-mapper';
 export { RuleHelper as FormFlowRuleHelper } from './utility/rule-helper';
 export { FieldHelper as FormFlowFieldHelper } from './utility/field-helper';
+export { RuleValidator as FormFlowRuleValidator } from './utility/rule-validator'
