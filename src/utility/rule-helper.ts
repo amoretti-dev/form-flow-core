@@ -4,7 +4,6 @@ import { FieldRuleDefinition } from "../models/rule";
 import { generateId } from "./id-helper";
 import { FieldHelper } from "./field-helper";
 
-
 export class RuleHelper {
     // Funzione privata per verificare se l'elemento è un gruppo
     static isGroup(rule: FieldRuleNode): rule is FieldRuleGroupDefinition {

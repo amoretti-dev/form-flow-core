@@ -2,9 +2,8 @@ import { ConditionalFieldProperty, FieldDefinition, RuleContextFieldDefinition }
 import { FormFlowDefinition } from "../models/form-definition";
 import { v4 as uuidv4 } from 'uuid';
 import { RuleHelper } from "../utility/rule-helper";
-import { Draft, castDraft, immerable, produce } from "immer";
+import { Draft, castDraft, produce } from "immer";
 import { FieldRuleGroupDefinition } from "../models/group";
-import { StateClass } from "../models/shared";
 import { FieldHelper } from "../utility/field-helper";
 
 export type RulesManagerState<TFieldControlType extends string = never> = {
