@@ -50,38 +50,89 @@ export interface RuleOperatorMeta<TCustom extends string = never> {
   hideFromPicker?: boolean;
 }
 
-export type RuleOperatorMetaPatch<TCustom extends string = never> =
-  Partial<RuleOperatorMeta<TCustom>>;
+export type RuleOperatorMetaPatch<TCustom extends string = never> = Partial<
+  RuleOperatorMeta<TCustom>
+>;
 
-export type RuleOperatorPatches<TCustom extends string = never> =
-  Partial<Record<RuleOperatorKey, RuleOperatorMetaPatch<TCustom>>>;
+export type RuleOperatorPatches<TCustom extends string = never> = Partial<
+  Record<RuleOperatorKey, RuleOperatorMetaPatch<TCustom>>
+>;
 
-export type RuleOperatorsMap<TCustom extends string = never> =
-  Partial<Record<RuleOperatorKey, RuleOperatorMeta<TCustom>>>;
+export type RuleOperatorsMap<TCustom extends string = never> = Partial<
+  Record<RuleOperatorKey, RuleOperatorMeta<TCustom>>
+>;
 
 /**
  * Default operator map shipped with `@form-flow/core`.
  * Consumers may override or extend this map at runtime.
  */
 export const FORM_FLOW_OPERATORS_MAP: RuleOperatorsMap = {
-  eq: { label: 'Equals', allowedTypes: "all", valueType: "single" },
-  neq: { label: 'Not equal to', allowedTypes: "all", valueType: "single" },
-  gt: { label: 'Greater than', allowedTypes: ['number', 'date'], valueType: "single" },
-  gte: { label: 'Greater than or equal to', allowedTypes: ['number', 'date'], valueType: "single" },
-  lt: { label: 'Less than', allowedTypes: ['number', 'date'], valueType: "single" },
-  lte: { label: 'Less than or equal to', allowedTypes: ['number', 'date'], valueType: "single" },
-  in: { label: 'Is in', allowedTypes: "all", valueType: "list" },
-  var: { label: 'Variable', allowedTypes: "all", valueType: "field", hideFromPicker: true },
-  isEmpty: { label: 'Is empty', allowedTypes: "all", valueType: "none" },
-  isNotEmpty: { label: 'Is not empty', allowedTypes: "all", valueType: "none" },
-  isTrue: { label: 'Is true', allowedTypes: ['checkbox'], valueType: "none" },
-  isFalse: { label: 'Is false', allowedTypes: ['checkbox'], valueType: "none" },
-  contains: { label: 'Contains', allowedTypes: ['text'], valueType: "single" },
-  startsWith: { label: 'Starts with', allowedTypes: ['text'], valueType: "single" },
-  endsWith: { label: 'Ends with', allowedTypes: ['text'], valueType: "single" },
-  dateAfter: { label: 'Date is after', allowedTypes: ['date'], valueType: "single" },
-  dateBefore: { label: 'Date is before', allowedTypes: ['date'], valueType: "single" },
-  lengthEquals: { label: 'Length equals', allowedTypes: ['text'], valueType: "single" },
-  truthy: { label: 'Is truthy', allowedTypes: ['checkbox'], valueType: "none" },
+  eq: { label: "Equals", allowedTypes: "all", valueType: "single" },
+  neq: { label: "Not equal to", allowedTypes: "all", valueType: "single" },
+  gt: {
+    label: "Greater than",
+    allowedTypes: ["number", "slider", "date"],
+    valueType: "single",
+  },
+  gte: {
+    label: "Greater than or equal to",
+    allowedTypes: ["number", "slider", "date"],
+    valueType: "single",
+  },
+  lt: {
+    label: "Less than",
+    allowedTypes: ["number", "slider", "date"],
+    valueType: "single",
+  },
+  lte: {
+    label: "Less than or equal to",
+    allowedTypes: ["number", "slider", "date"],
+    valueType: "single",
+  },
+  in: { label: "Is in", allowedTypes: "all", valueType: "list" },
+  var: {
+    label: "Variable",
+    allowedTypes: "all",
+    valueType: "field",
+    hideFromPicker: true,
+  },
+  isEmpty: { label: "Is empty", allowedTypes: "all", valueType: "none" },
+  isNotEmpty: { label: "Is not empty", allowedTypes: "all", valueType: "none" },
+  isTrue: {
+    label: "Is true",
+    allowedTypes: ["checkbox", "switch"],
+    valueType: "none",
+  },
+  isFalse: {
+    label: "Is false",
+    allowedTypes: ["checkbox", "switch"],
+    valueType: "none",
+  },
+  contains: { label: "Contains", allowedTypes: ["text"], valueType: "single" },
+  startsWith: {
+    label: "Starts with",
+    allowedTypes: ["text"],
+    valueType: "single",
+  },
+  endsWith: { label: "Ends with", allowedTypes: ["text"], valueType: "single" },
+  dateAfter: {
+    label: "Date is after",
+    allowedTypes: ["date"],
+    valueType: "single",
+  },
+  dateBefore: {
+    label: "Date is before",
+    allowedTypes: ["date"],
+    valueType: "single",
+  },
+  lengthEquals: {
+    label: "Length equals",
+    allowedTypes: ["text"],
+    valueType: "single",
+  },
+  truthy: {
+    label: "Is truthy",
+    allowedTypes: ["checkbox", "switch"],
+    valueType: "none",
+  },
 };
-
