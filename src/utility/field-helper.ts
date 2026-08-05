@@ -1,26 +1,28 @@
-import { FormFlow } from "../models/config";
-import { FieldDefinition, ConditionalFieldProperty, FieldControlType } from "../models/field-definition";
+import { FormFlowPrimitivesHelper } from "@/utility/primitives-helper";
+import {
+  FieldDefinition,
+  ConditionalFieldProperty,
+  FieldControlType,
+} from "../models/field-definition";
 
 export class FieldHelper {
+  static getFieldById(fields: FieldDefinition[], id: string) {
+    return fields.find((f) => f.id === id);
+  }
 
-    static getFieldById<TCustom extends string = never>(fields: FieldDefinition<TCustom>[], id: string) {
-        return fields.find(f => f.id === id);
-    }
+  static getFieldIndex(fields: FieldDefinition[], id: string) {
+    return fields.findIndex((f) => f.id === id);
+  }
 
-    static getFieldIndex<TCustom extends string = never>(fields: FieldDefinition<TCustom>[], id: string) {
-        return fields.findIndex(f => f.id === id);
-    }
-
-    static getAvailableRuleTypes(field: FieldDefinition): ConditionalFieldProperty[] {
-        var types: ConditionalFieldProperty[] = ["visibleIf", "disabledIf", "requiredIf", "readonlyIf"];
-        return types.filter(k => field[k] == undefined);
-    }
-
-    static getDefaultValue<TFieldType extends string = never>(fieldType: FieldControlType<TFieldType>) {
-        return FormFlow.fieldTypes[fieldType].defaultValue;
-    }
-
-    static getPrimitive<TFieldType extends string = never>(fieldType: FieldControlType<TFieldType>) {
-        return FormFlow.fieldTypes[fieldType].primitive;
-    }
+  static getAvailableRuleTypes(
+    field: FieldDefinition,
+  ): ConditionalFieldProperty[] {
+    var types: ConditionalFieldProperty[] = [
+      "visibleIf",
+      "disabledIf",
+      "requiredIf",
+      "readonlyIf",
+    ];
+    return types.filter((k) => field[k] == undefined);
+  }
 }

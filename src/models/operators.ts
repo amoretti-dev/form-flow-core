@@ -33,15 +33,15 @@ export type RuleOperatorValueType =
 /**
  * Metadata for describing how an operator behaves.
  */
-export interface RuleOperatorMeta<TCustom extends string = never> {
+export interface RuleOperatorMeta {
   /** Label to display in the UI (can be customized by consumers). */
   label: string;
 
   /** Which field types this operator is allowed for. */
-  allowedTypes?: FieldControlType<TCustom>[] | "all";
+  allowedTypes?: FieldControlType[] | "all";
 
   /** Exclude field types by using this operator */
-  disallowedTypes?: FieldControlType<TCustom>[];
+  disallowedTypes?: FieldControlType[];
 
   /** The type of value this operator requires. */
   valueType?: RuleOperatorValueType;
@@ -50,16 +50,14 @@ export interface RuleOperatorMeta<TCustom extends string = never> {
   hideFromPicker?: boolean;
 }
 
-export type RuleOperatorMetaPatch<TCustom extends string = never> = Partial<
-  RuleOperatorMeta<TCustom>
+export type RuleOperatorMetaPatch = Partial<RuleOperatorMeta>;
+
+export type RuleOperatorPatches = Partial<
+  Record<RuleOperatorKey, RuleOperatorMetaPatch>
 >;
 
-export type RuleOperatorPatches<TCustom extends string = never> = Partial<
-  Record<RuleOperatorKey, RuleOperatorMetaPatch<TCustom>>
->;
-
-export type RuleOperatorsMap<TCustom extends string = never> = Partial<
-  Record<RuleOperatorKey, RuleOperatorMeta<TCustom>>
+export type RuleOperatorsMap = Partial<
+  Record<RuleOperatorKey, RuleOperatorMeta>
 >;
 
 /**

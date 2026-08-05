@@ -31,14 +31,11 @@ export class RuleValidator {
     return typeof value === "number" && !Number.isNaN(value);
   }
 
-  static validate<TCustom extends string = never>(
-    rule: FieldRuleDefinition,
-    fieldType: FieldControlType<TCustom>,
-  ) {
+  static validate(rule: FieldRuleDefinition, fieldType: FieldControlType) {
     if (rule.operator == "lengthEquals") {
       fieldType = "number";
     }
-    const op = OperatorRegistry.get<TCustom>(rule.operator);
+    const op = OperatorRegistry.get(rule.operator);
 
     if (!rule.conditionFieldId || !op) {
       return {

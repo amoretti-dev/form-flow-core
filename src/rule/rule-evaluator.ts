@@ -1,25 +1,31 @@
-import { FieldControlState, FieldDefinition, FormControlState } from '../models/field-definition';
-import { DependencyGraph } from '../dependency-graph';
-import jsonLogic, { RulesLogic } from 'json-logic-js';
-import { RuleMapper } from '../utility/rule-mapper';
+import {
+  FieldControlState,
+  FieldDefinition,
+  FormControlState,
+} from "../models/field-definition";
+import { DependencyGraph } from "../dependency-graph";
+import jsonLogic, { RulesLogic } from "json-logic-js";
+import { RuleMapper } from "../utility/rule-mapper";
 
 export class RuleEvaluator {
-
-  static evaluate(rule: RulesLogic | undefined, data: Record<string, any>): boolean {
+  static evaluate(
+    rule: RulesLogic | undefined,
+    data: Record<string, any>,
+  ): boolean {
     if (!rule) return true; // Se la regola è indefinita, ritorna true (o false, a seconda della logica desiderata)
     try {
       // Valida la regola con jsonLogic, se non è valida, restituirà undefined
       const result = jsonLogic.apply(rule, data);
       return result !== undefined ? !!result : false;
     } catch (err) {
-      console.warn('Rule evaluation error:', err);
+      console.warn("Rule evaluation error:", err);
       return false; // Restituisce false in caso di errore nell'applicazione della regola
     }
   }
 
   static evaluateField = (
     field: FieldDefinition,
-    formData: Record<string, any>
+    formData: Record<string, any>,
   ): FieldControlState => {
     const visible = field.visibleIf
       ? this.evaluate(RuleMapper.mapGroupToEngine(field.visibleIf), formData)
@@ -38,9 +44,9 @@ export class RuleEvaluator {
       visible,
       disabled,
       readonly,
-      required
-    }
-  }
+      required,
+    };
+  };
 
   static evaluateFields(
     fields: FieldDefinition[],
@@ -57,11 +63,14 @@ export class RuleEvaluator {
     sourceFieldId: string,
     otherFields: FieldDefinition[],
     formData: Record<string, any>,
-    dependencyGraph: DependencyGraph
+    dependencyGraph: DependencyGraph,
   ): FormControlState {
     const affectedFieldIds = dependencyGraph.getDependentFields(sourceFieldId);
 
-    return this.evaluateFields(otherFields.filter(field => affectedFieldIds.has(field.id)), formData);
+    return this.evaluateFields(
+      otherFields.filter((field) => affectedFieldIds.has(field.id)),
+      formData,
+    );
   }
 
   static extractVarsFromRule(rule: RulesLogic): string[] {
@@ -69,18 +78,18 @@ export class RuleEvaluator {
 
     // Funzione ricorsiva che attraversa la regola JSON
     const walk = (r: any) => {
-      if (typeof r !== 'object' || r === null) return;
+      if (typeof r !== "object" || r === null) return;
 
       if (Array.isArray(r)) {
         // Se è un array, esplora ogni elemento
         r.forEach(walk);
       } else {
         for (const key in r) {
-          if (key === 'var') {
+          if (key === "var") {
             // Se trova una variabile 'var', la aggiunge all'elenco
-            if (typeof r[key] === 'string') {
+            if (typeof r[key] === "string") {
               vars.push(r[key]);
-            } else if (Array.isArray(r[key]) && typeof r[key][0] === 'string') {
+            } else if (Array.isArray(r[key]) && typeof r[key][0] === "string") {
               vars.push(r[key][0]);
             }
           } else {

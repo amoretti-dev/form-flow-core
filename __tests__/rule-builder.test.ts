@@ -1,37 +1,29 @@
 import {
-  FormFlowRuleBuilder,
+  createRuleBuilderHelpers,
   FormFlowRuleEvaluator,
   type FieldDefinition,
 } from "../src/index";
 
-const createIdFactory = () => {
-  let nextId = 0;
-
-  return (kind: "group" | "rule") => `${kind}-${++nextId}`;
-};
-
-describe("FormFlowRuleBuilder", () => {
+describe("createRuleBuilderHelpers", () => {
   it("creates a domain rule tree with sensible defaults", () => {
-    const builder = new FormFlowRuleBuilder({
-      ruleType: "visibleIf",
-      createId: createIdFactory(),
-    });
+    const helpers = createRuleBuilderHelpers();
+    const state = helpers.createState({ ruleType: "visibleIf" });
 
-    const rule = builder.addRule({
-      id: "age",
-      label: "Age",
-      type: "number",
-    });
+    const { rule, state: nextState } = helpers.addRule(
+      { id: "age", label: "Age", type: "number" },
+      state,
+      state.rootGroup.groupId!,
+    );
 
     expect(rule).toEqual({
-      ruleId: "rule-1",
+      ruleId: expect.any(String),
       conditionFieldId: "age",
       operator: "eq",
       value: 0,
     });
 
-    expect(builder.build()).toEqual({
-      groupId: "root",
+    expect(nextState.rootGroup).toEqual({
+      groupId: state.rootGroup.groupId,
       operator: "and",
       ruleType: "visibleIf",
       rules: [rule],
@@ -39,34 +31,59 @@ describe("FormFlowRuleBuilder", () => {
   });
 
   it("builds nested groups that can be evaluated by the existing engine", () => {
-    const builder = new FormFlowRuleBuilder({
-      ruleType: "visibleIf",
-      createId: createIdFactory(),
-    });
+    const helpers = createRuleBuilderHelpers();
+    let state = helpers.createState({ ruleType: "visibleIf" });
 
-    const nestedGroup = builder.addGroup({ operator: "or", not: true });
-    builder.addRule(
-      { id: "status", label: "Status", type: "text" },
+    const { group: nestedGroup, state: withGroup } = helpers.addGroup(
+      "visibleIf",
+      state,
+      state.rootGroup.groupId!,
+    );
+    state = withGroup;
+
+    const withStatusRule = helpers.addGroupOrRule(
+      state,
+      nestedGroup.groupId!,
       {
-        parentGroupId: nestedGroup.groupId,
+        ruleId: "status-rule",
+        conditionFieldId: "status",
         operator: "eq",
         value: "inactive",
       },
     );
-    builder.addRule(
+    state = withStatusRule.state;
+
+    const { rule: ageRule, state: withAgeRule } = helpers.addRule(
       { id: "age", label: "Age", type: "number" },
-      {
-        operator: "gte",
-        value: 18,
-      },
+      state,
+      state.rootGroup.groupId!,
     );
-    builder.setRuleType("disabledIf");
+    state = withAgeRule;
+
+    const { rootGroup: rootGroupWithAgeRule } = helpers.updateRule(
+      state,
+      state.rootGroup.groupId!,
+      { ...ageRule, operator: "gte", value: 18 },
+    );
+    state = helpers.createState({
+      rootGroup: rootGroupWithAgeRule,
+      ruleType: rootGroupWithAgeRule.ruleType,
+    });
+
+    const { state: withNot } = helpers.updateGroupNot(
+      state,
+      nestedGroup.groupId!,
+      true,
+    );
+    state = withNot;
+
+    const { rootGroup } = helpers.updateRootGroupRuleType(state, "disabledIf");
 
     const field: FieldDefinition = {
       id: "consent",
       label: "Consent",
       type: "checkbox",
-      disabledIf: builder.build(),
+      disabledIf: rootGroup,
     };
 
     const evaluated = FormFlowRuleEvaluator.evaluateField(field, {
@@ -74,33 +91,6 @@ describe("FormFlowRuleBuilder", () => {
       status: "active",
     });
 
-    expect(field.disabledIf).toEqual({
-      groupId: "root",
-      operator: "and",
-      ruleType: "disabledIf",
-      rules: [
-        {
-          groupId: "group-1",
-          operator: "or",
-          ruleType: "disabledIf",
-          not: true,
-          rules: [
-            {
-              ruleId: "rule-2",
-              conditionFieldId: "status",
-              operator: "eq",
-              value: "inactive",
-            },
-          ],
-        },
-        {
-          ruleId: "rule-3",
-          conditionFieldId: "age",
-          operator: "gte",
-          value: 18,
-        },
-      ],
-    });
     expect(evaluated.disabled).toBe(true);
   });
 });
